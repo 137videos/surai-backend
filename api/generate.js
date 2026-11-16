@@ -12,6 +12,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed, use POST' });
+  }
 
   const { title, lyrics, style, voice } = req.body || {};
 
@@ -44,7 +46,6 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: data.msg || 'SunoAPI ne error diya', raw: data });
     }
 
-    // taskId ko frontend ko wapas bhejo — status poll karne ke liye isi ki zaroorat hai
     return res.status(200).json({ taskId: data.data.taskId });
   } catch (err) {
     return res.status(500).json({ error: 'Server error', detail: err.message });
