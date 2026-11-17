@@ -39,7 +39,7 @@ export default async function handler(req, res) {
         title: String(title).slice(0, 80),
         prompt: lyrics,
         style: style || 'Indian Pop',
-        model: 'V4_5',
+        model: 'V4_5',callBackUrl,
       }),
     });
 
