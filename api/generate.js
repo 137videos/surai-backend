@@ -23,6 +23,9 @@ export default async function handler(req, res) {
 
   const instrumental = voice === 'Instrumental Only';
 
+  const proto = req.headers['x-forwarded-proto'] || 'https';
+  const callBackUrl = `${proto}://${req.headers.host}/api/callback`;
+
   try {
     const response = await fetch('https://api.sunoapi.org/api/v1/generate', {
       method: 'POST',
