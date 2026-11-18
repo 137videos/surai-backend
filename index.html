@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1a0f1c; --bg2: #241530; --card: rgba(255,255,255,0.06); --card-edge: rgba(255,255,255,0.12);
-    --orange: #ff6a3d; --pink: #ff3d7f;
-    --text: #f5ecf2; --text-dim: #b8a3b2;
-    color-scheme: dark;
+    --bg: #f4f6fa; --bg2: #ffffff; --card: #ffffff; --card-edge: #dde3ec;
+    --orange: #1e3a8a; --pink: #2563eb;
+    --text: #1c2430; --text-dim: #697184;
+    color-scheme: light;
   }
   * { box-sizing: border-box; }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
@@ -20,9 +20,8 @@
     margin: 0; min-height: 100%; color: var(--text); font-family: 'Hind', sans-serif;
     background: var(--bg);
     background-image:
-      radial-gradient(circle at 15% -5%, rgba(255,106,61,0.25), transparent 45%),
-      radial-gradient(circle at 85% 10%, rgba(255,61,127,0.25), transparent 45%),
-      radial-gradient(circle at 50% 60%, rgba(120,70,160,0.2), transparent 55%);
+      radial-gradient(circle at 15% -5%, rgba(37,99,235,0.08), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(30,58,138,0.07), transparent 45%);
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
@@ -50,9 +49,9 @@
 
   textarea, input {
     width: 100%; padding: 12px 13px; border: 1px solid var(--card-edge); border-radius: 12px;
-    background: rgba(0,0,0,0.25); color: var(--text); font-size: 15.5px; font-family: inherit;
+    background: var(--bg); color: var(--text); font-size: 15.5px; font-family: inherit;
   }
-  textarea::placeholder, input::placeholder { color: #8a7988; }
+  textarea::placeholder, input::placeholder { color: #9aa2b2; }
   textarea { height: 96px; resize: vertical; }
   textarea:focus, input:focus { outline: 2px solid var(--pink); outline-offset: 1px; }
 
@@ -76,8 +75,15 @@
   button.primary:active { transform: translateY(1px); }
   button.primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
+  button.wand {
+    width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--card-edge);
+    background: var(--bg); color: var(--orange); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  button.wand:disabled { opacity: 0.5; cursor: not-allowed; }
+
   .status { margin-top: 14px; font-size: 13.5px; color: var(--text-dim); line-height: 1.6; min-height: 1.4em; }
-  .track { margin-top: 14px; padding: 14px; border-radius: 14px; background: rgba(0,0,0,0.25); border: 1px solid var(--card-edge); }
+  .track { margin-top: 14px; padding: 14px; border-radius: 14px; background: var(--bg); border: 1px solid var(--card-edge); }
   .track-title { margin: 0 0 8px; font-weight: 600; font-size: 14.5px; }
   .track audio { width: 100%; }
 
@@ -97,7 +103,10 @@
 
 <main>
   <div class="section">
-    <div class="section-head" data-i18n="lyricsHead"></div>
+    <div class="section-head">
+      <span data-i18n="lyricsHead"></span>
+      <button type="button" class="wand" id="lyricsWandBtn" onclick="autoLyrics()" title="auto">✨</button>
+    </div>
     <textarea id="lyrics" data-i18n-placeholder="lyricsPlaceholder"></textarea>
     <label class="toggle-row">
       <input type="checkbox" id="instrumental">
@@ -106,7 +115,10 @@
   </div>
 
   <div class="section">
-    <div class="section-head" data-i18n="styleHead"></div>
+    <div class="section-head">
+      <span data-i18n="styleHead"></span>
+      <button type="button" class="wand" id="styleWandBtn" onclick="autoStyle()" title="auto">✨</button>
+    </div>
     <textarea id="style" data-i18n-placeholder="stylePlaceholder"></textarea>
   </div>
 
@@ -148,7 +160,10 @@ const i18n = {
     timeout: 'समय ज़्यादा लग रहा है। थोड़ी देर बाद दोबारा कोशिश करें।',
     networkErr: 'नेटवर्क एरर, दोबारा कोशिश करें।',
     genericErr: 'कुछ गलत हुआ, दोबारा कोशिश करें।',
-    trackFallback: 'गाना'
+    trackFallback: 'गाना',
+    lyricsWorking: 'बोल लिखे जा रहे हैं...',
+    lyricsFailed: 'बोल नहीं लिख पाया, दोबारा कोशिश करें।',
+    lyricsTimeout: 'समय ज़्यादा लग रहा है, दोबारा कोशिश करें।'
   },
   en: {
     tagline: 'Your voice, your words — a song made with AI',
@@ -170,7 +185,10 @@ const i18n = {
     timeout: 'Taking longer than expected. Please try again shortly.',
     networkErr: 'Network error, please try again.',
     genericErr: 'Something went wrong, please try again.',
-    trackFallback: 'Song'
+    trackFallback: 'Song',
+    lyricsWorking: 'Writing lyrics...',
+    lyricsFailed: 'Could not write lyrics, please try again.',
+    lyricsTimeout: 'Taking too long, please try again.'
   }
 };
 
@@ -195,6 +213,114 @@ function toggleMore(){
   const arrow = document.getElementById('moreArrow');
   el.classList.toggle('open');
   arrow.textContent = el.classList.contains('open') ? '⌃' : '⌄';
+}
+
+const lyricsThemes = {
+  hi: [
+    'हनुमान जी की भक्ति, शक्ति और साहस की कहानी',
+    'माता रानी की आरती, मां की ममता और आशीर्वाद',
+    'कृष्ण जी की रासलीला और बांसुरी की धुन',
+    'रोमांटिक प्यार, पहली मुलाकात का एहसास',
+    'दोस्ती और पार्टी की मस्ती, DJ की धुन पर नाचना',
+    'मां-बाप का त्याग और बच्चों के लिए प्यार'
+  ],
+  en: [
+    "Hanuman ji's devotion, strength and courage",
+    "Durga Maa's grace and a mother's blessing",
+    "Krishna's playful rasleela and the flute's tune",
+    'Romantic love, the feeling of a first meeting',
+    'Friendship and party energy, dancing to a DJ beat',
+    "A parent's sacrifice and love for their children"
+  ]
+};
+
+const styleOptions = {
+  hi: [
+    'भजन, ढोलक, भक्ति संगीत, DJ मिक्स',
+    'माता रानी भजन, DJ मिक्स, ढोलक, फुल बास',
+    'कृष्ण भजन, बांसुरी, सॉफ्ट मेलोडी',
+    'Bollywood romantic, soft piano, duet vocals',
+    'Indian Pop, DJ, Full Bass, dance beat',
+    'भावुक गीत, सॉफ्ट म्यूज़िक, पियानो'
+  ],
+  en: [
+    'Bhajan, dholak, devotional, DJ mix',
+    'Devotional bhajan, DJ mix, dholak, heavy bass',
+    'Krishna bhajan, flute, soft melody',
+    'Bollywood romantic, soft piano, duet vocals',
+    'Indian Pop, DJ, Full Bass, dance beat',
+    'Emotional song, soft music, piano'
+  ]
+};
+
+function autoStyle(){
+  const styleBox = document.getElementById('style');
+  const options = styleOptions[currentLang];
+  styleBox.value = options[Math.floor(Math.random() * options.length)];
+}
+
+async function autoLyrics(){
+  const t = i18n[currentLang];
+  const status = document.getElementById('status');
+  const btn = document.getElementById('lyricsWandBtn');
+  const lyricsBox = document.getElementById('lyrics');
+
+  const themes = lyricsThemes[currentLang];
+  const theme = themes[Math.floor(Math.random() * themes.length)];
+
+  btn.disabled = true;
+  status.textContent = t.lyricsWorking;
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/lyrics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: theme })
+    });
+    const data = await res.json();
+    if(!res.ok || !data.taskId){
+      status.textContent = data.error || t.lyricsFailed;
+      btn.disabled = false;
+      return;
+    }
+    pollLyrics(data.taskId, lyricsBox, btn, t);
+  } catch(err){
+    status.textContent = t.networkErr;
+    btn.disabled = false;
+  }
+}
+
+function pollLyrics(taskId, lyricsBox, btn, t){
+  const status = document.getElementById('status');
+  let attempts = 0;
+  const maxAttempts = 20;
+
+  const timer = setInterval(async () => {
+    attempts++;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/lyrics-status?taskId=${encodeURIComponent(taskId)}`);
+      const data = await res.json();
+      const items = (data.response && data.response.lyricsData) || data.lyricsData || [];
+      const done = items.find(it => it.status === 'complete' && it.text);
+
+      if (done){
+        clearInterval(timer);
+        lyricsBox.value = done.text;
+        status.textContent = '';
+        btn.disabled = false;
+      } else if (items.length && items.every(it => it.status === 'failed')){
+        clearInterval(timer);
+        status.textContent = t.lyricsFailed;
+        btn.disabled = false;
+      }
+    } catch(e){ /* retry on next tick */ }
+
+    if (attempts >= maxAttempts){
+      clearInterval(timer);
+      status.textContent = t.lyricsTimeout;
+      btn.disabled = false;
+    }
+  }, 4000);
 }
 
 async function makeSong(){
