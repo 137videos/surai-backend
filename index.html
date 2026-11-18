@@ -9,175 +9,75 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f3fbf9;
-    --bg-soft: #ffffff;
-    --card: #ffffff;
-    --card-edge: #dcecee;
-    --blue: #6cc8ef;
-    --green: #7fdba0;
-    --pink: #f598c3;
-    --text: #203042;
-    --text-dim: #72828f;
-    color-scheme: light;
+    --bg: #1a0f1c; --bg2: #241530; --card: rgba(255,255,255,0.06); --card-edge: rgba(255,255,255,0.12);
+    --orange: #ff6a3d; --pink: #ff3d7f;
+    --text: #f5ecf2; --text-dim: #b8a3b2;
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   body {
-    margin: 0;
-    min-height: 100%;
+    margin: 0; min-height: 100%; color: var(--text); font-family: 'Hind', sans-serif;
     background: var(--bg);
-    color: var(--text);
-    font-family: 'Hind', sans-serif;
+    background-image:
+      radial-gradient(circle at 15% -5%, rgba(255,106,61,0.25), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(255,61,127,0.25), transparent 45%),
+      radial-gradient(circle at 50% 60%, rgba(120,70,160,0.2), transparent 55%);
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  h1, h2, .brand { font-family: 'Baloo 2', sans-serif; }
+  h1, h2, .brand, button.primary { font-family: 'Baloo 2', sans-serif; }
 
-  .glow-field {
-    position: relative;
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 20% 10%, rgba(108,200,239,0.35), transparent 50%),
-      radial-gradient(circle at 82% 15%, rgba(127,219,160,0.3), transparent 50%),
-      radial-gradient(circle at 50% 50%, rgba(245,152,195,0.25), transparent 55%);
-    padding: 48px 20px 30px;
-    text-align: center;
-  }
-
+  .top { position: relative; padding: 44px 20px 24px; text-align: center; }
   .lang-toggle {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    display: flex;
-    background: var(--card);
-    border: 1px solid var(--card-edge);
-    border-radius: 999px;
-    overflow: hidden;
-    font-family: 'Baloo 2', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
+    position: absolute; top: 14px; right: 14px; display: flex;
+    background: var(--card); border: 1px solid var(--card-edge);
+    border-radius: 999px; overflow: hidden; font-family: 'Baloo 2', sans-serif; font-size: 13px; font-weight: 700;
   }
-  .lang-toggle button {
-    all: unset;
-    padding: 6px 14px;
-    cursor: pointer;
-    color: var(--text-dim);
-  }
-  .lang-toggle button.active {
-    background: linear-gradient(90deg, var(--blue), var(--green));
-    color: #ffffff;
-  }
+  .lang-toggle button { all: unset; padding: 6px 14px; cursor: pointer; color: var(--text-dim); }
+  .lang-toggle button.active { background: linear-gradient(90deg, var(--orange), var(--pink)); color: #fff; }
 
-  .wave-orb {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 14px;
-    border-radius: 50%;
-    background: linear-gradient(160deg, var(--blue), var(--green));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    box-shadow: 0 0 36px 8px rgba(108,200,239,0.4);
-  }
-  .wave-orb span {
-    display: block;
-    width: 4px;
-    border-radius: 2px;
-    background: #ffffff;
-    animation: bounce 1.1s ease-in-out infinite;
-  }
-  .wave-orb span:nth-child(1) { height: 14px; animation-delay: 0s; }
-  .wave-orb span:nth-child(2) { height: 24px; animation-delay: 0.15s; }
-  .wave-orb span:nth-child(3) { height: 32px; animation-delay: 0.3s; }
-  .wave-orb span:nth-child(4) { height: 22px; animation-delay: 0.45s; }
-  .wave-orb span:nth-child(5) { height: 12px; animation-delay: 0.6s; }
-  @keyframes bounce {
-    0%, 100% { transform: scaleY(0.6); }
-    50% { transform: scaleY(1.2); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .wave-orb span { animation: none; }
-  }
-  .brand { font-size: 30px; font-weight: 800; margin: 0; letter-spacing: 0.3px; }
-  .tagline { color: var(--text-dim); margin: 8px 0 0; font-size: 15px; }
+  .brand { font-size: 28px; font-weight: 800; margin: 0; }
+  .tagline { color: var(--text-dim); margin: 8px 0 0; font-size: 14.5px; }
 
-  main { max-width: 560px; margin: 0 auto; padding: 0 20px 48px; }
+  main { max-width: 560px; margin: 0 auto; padding: 0 18px 48px; }
 
-  .card {
-    background: var(--card);
-    border: 1px solid var(--card-edge);
-    border-radius: 20px;
-    padding: 26px 22px;
-    margin-top: 22px;
+  .section {
+    background: var(--card); border: 1px solid var(--card-edge); border-radius: 18px;
+    padding: 16px 16px 14px; margin-top: 14px;
   }
-  .card h2 { margin: 0 0 4px; font-size: 21px; font-weight: 700; }
-  .card .sub { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; font-weight: 600; font-size: 15px; margin-bottom: 10px; }
 
-  label { display: block; font-size: 14px; color: var(--text-dim); margin: 18px 0 8px; }
-  label:first-of-type { margin-top: 0; }
+  textarea, input {
+    width: 100%; padding: 12px 13px; border: 1px solid var(--card-edge); border-radius: 12px;
+    background: rgba(0,0,0,0.25); color: var(--text); font-size: 15.5px; font-family: inherit;
+  }
+  textarea::placeholder, input::placeholder { color: #8a7988; }
+  textarea { height: 96px; resize: vertical; }
+  textarea:focus, input:focus { outline: 2px solid var(--pink); outline-offset: 1px; }
 
-  input, select, textarea {
-    width: 100%;
-    padding: 13px 14px;
-    border: 1px solid var(--card-edge);
-    border-radius: 12px;
-    background: var(--bg-soft);
-    color: var(--text);
-    font-size: 16px;
-    font-family: inherit;
+  .toggle-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 14px; color: var(--text-dim); }
+  .toggle-row input { width: auto; accent-color: var(--pink); }
+
+  .more-toggle {
+    width: 100%; background: transparent; border: 1px solid var(--card-edge); border-radius: 12px;
+    color: var(--text); padding: 11px; font-size: 14.5px; font-family: 'Hind', sans-serif; font-weight: 600;
+    margin-top: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
   }
-  input::placeholder, textarea::placeholder { color: #7c6a99; }
-  textarea { height: 104px; resize: vertical; }
-  select {
-    appearance: none;
-    background-image: linear-gradient(45deg, transparent 50%, var(--blue) 50%), linear-gradient(135deg, var(--blue) 50%, transparent 50%);
-    background-position: calc(100% - 20px) center, calc(100% - 15px) center;
-    background-size: 5px 5px, 5px 5px;
-    background-repeat: no-repeat;
-  }
-  input:focus, select:focus, textarea:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+  #moreOptions { display: none; margin-top: 10px; }
+  #moreOptions.open { display: block; }
 
   button.primary {
-    width: 100%;
-    padding: 16px;
-    margin-top: 24px;
-    border: 0;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--blue), var(--green) 50%, var(--pink));
-    background-size: 180% 100%;
-    background-position: 0% 0%;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-    font-family: 'Baloo 2', sans-serif;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    box-shadow: 0 10px 24px -8px rgba(108,200,239,0.6);
-    transition: background-position 0.4s ease;
+    width: 100%; padding: 17px; margin-top: 18px; border: 0; border-radius: 999px;
+    background: linear-gradient(90deg, var(--pink), var(--orange));
+    color: #fff; font-size: 17px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer;
+    box-shadow: 0 10px 26px -8px rgba(255,61,127,0.5);
   }
-  button.primary:hover { background-position: 100% 0%; }
   button.primary:active { transform: translateY(1px); }
-  button.primary:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
   button.primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-  button.ghost {
-    width: 100%;
-    margin-top: 10px;
-    padding: 11px;
-    border: 1px dashed var(--card-edge);
-    border-radius: 12px;
-    background: var(--bg-soft);
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Hind', sans-serif;
-    cursor: pointer;
-  }
-  button.ghost:disabled { opacity: 0.6; cursor: not-allowed; }
-
   .status { margin-top: 14px; font-size: 13.5px; color: var(--text-dim); line-height: 1.6; min-height: 1.4em; }
-  .track { margin-top: 16px; padding: 14px; border-radius: 14px; background: var(--bg-soft); border: 1px solid var(--card-edge); }
+  .track { margin-top: 14px; padding: 14px; border-radius: 14px; background: rgba(0,0,0,0.25); border: 1px solid var(--card-edge); }
   .track-title { margin: 0 0 8px; font-weight: 600; font-size: 14.5px; }
   .track audio { width: 100%; }
 
@@ -186,49 +86,40 @@
 </head>
 <body>
 
-<div class="glow-field">
+<div class="top">
   <div class="lang-toggle">
     <button id="langHi" class="active" onclick="setLang('hi')">हिं</button>
     <button id="langEn" onclick="setLang('en')">EN</button>
   </div>
-  <div class="wave-orb" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-  <h1 class="brand">SurAI Studio</h1>
+  <h1 class="brand">🎵 SurAI Studio</h1>
   <p class="tagline" data-i18n="tagline"></p>
 </div>
 
 <main>
-  <div class="card">
-    <h2 data-i18n="heading"></h2>
-    <p class="sub" data-i18n="subheading"></p>
-
-    <label for="title" data-i18n="titleLabel"></label>
-    <input id="title" data-i18n-placeholder="titlePlaceholder">
-
-    <label for="lyrics" data-i18n="lyricsLabel"></label>
+  <div class="section">
+    <div class="section-head" data-i18n="lyricsHead"></div>
     <textarea id="lyrics" data-i18n-placeholder="lyricsPlaceholder"></textarea>
-    <button type="button" class="ghost" id="autoLyricsBtn" onclick="autoWriteLyrics()" data-i18n="autoLyricsBtn"></button>
-
-    <label for="style" data-i18n="styleLabel"></label>
-    <select id="style">
-      <option>Indian Pop + DJ + Full Bass</option>
-      <option>माता रानी भजन DJ Mix</option>
-      <option>खाटू श्याम भजन</option>
-      <option>कृष्ण भजन</option>
-      <option>महादेव भजन</option>
-    </select>
-
-    <label for="voice" data-i18n="voiceLabel"></label>
-    <select id="voice">
-      <option>Male Vocal</option>
-      <option>Female Vocal</option>
-      <option>Male + Female Duet</option>
-      <option>Instrumental Only</option>
-    </select>
-
-    <button class="primary" id="makeBtn" onclick="makeSong()" data-i18n="submitBtn"></button>
-    <p id="status" class="status"></p>
-    <div id="result"></div>
+    <label class="toggle-row">
+      <input type="checkbox" id="instrumental">
+      <span data-i18n="instrumentalLabel"></span>
+    </label>
   </div>
+
+  <div class="section">
+    <div class="section-head" data-i18n="styleHead"></div>
+    <textarea id="style" data-i18n-placeholder="stylePlaceholder"></textarea>
+  </div>
+
+  <button type="button" class="more-toggle" onclick="toggleMore()">
+    <span data-i18n="moreOptions"></span><span id="moreArrow">⌄</span>
+  </button>
+  <div id="moreOptions">
+    <input id="title" data-i18n-placeholder="titlePlaceholder">
+  </div>
+
+  <button class="primary" id="makeBtn" onclick="makeSong()" data-i18n="submitBtn"></button>
+  <p id="status" class="status"></p>
+  <div id="result"></div>
 </main>
 
 <footer>© 2026 SurAI Studio</footer>
@@ -239,59 +130,47 @@ const BACKEND_URL = '';
 const i18n = {
   hi: {
     tagline: 'अपनी आवाज़, अपने बोल — AI से बना अपना गाना',
-    heading: 'अपना नया गाना बनाएं',
-    subheading: 'नाम, बोल और स्टाइल भरें — बाकी हम संभालते हैं',
-    titleLabel: 'गाने का नाम',
-    titlePlaceholder: 'जैसे: माँ शेरावाली',
-    lyricsLabel: 'गाने के बोल या आइडिया',
-    lyricsPlaceholder: 'अपने गाने के बोल या कहानी लिखें...',
-    styleLabel: 'म्यूजिक स्टाइल',
-    voiceLabel: 'आवाज़',
-    submitBtn: 'गाना बनाने की रिक्वेस्ट भेजें',
-    needFields: 'कृपया गाने का नाम और बोल या आइडिया लिखें।',
+    lyricsHead: 'बोल (Lyrics)',
+    lyricsPlaceholder: 'गाने के बोल लिखें, या सिर्फ़ आइडिया बताएं...',
+    instrumentalLabel: 'सिर्फ़ संगीत (बिना आवाज़)',
+    styleHead: 'स्टाइल (Styles)',
+    stylePlaceholder: 'गाना कैसा सुनाई दे, बताएं — जैसे: DJ, भजन, रोमांटिक...',
+    moreOptions: 'और विकल्प',
+    titlePlaceholder: 'गाने का नाम (वैकल्पिक)',
+    submitBtn: 'गाना बनाएं 🎵',
+    needFields: 'कृपया बोल या स्टाइल में से कुछ लिखें।',
     sending: 'रिक्वेस्ट भेजी जा रही है...',
-    generating: 'गाना बन रहा है... (इसमें 30-60 सेकंड लग सकते हैं)',
+    generating: 'गाना बन रहा है... (30-60 सेकंड लग सकते हैं)',
     waiting: 'गाना बन रहा है... कृपया इंतज़ार करें।',
     done: 'गाना तैयार है! 🎉',
-    doneNoAudio: 'गाना बना, पर ऑडियो नहीं मिला। कृपया दोबारा कोशिश करें।',
+    doneNoAudio: 'गाना बना, पर ऑडियो नहीं मिला। दोबारा कोशिश करें।',
     failed: 'गाना बनाने में समस्या आई। दोबारा कोशिश करें।',
-    timeout: 'समय ज़्यादा लग रहा है। कृपया थोड़ी देर बाद दोबारा कोशिश करें।',
+    timeout: 'समय ज़्यादा लग रहा है। थोड़ी देर बाद दोबारा कोशिश करें।',
     networkErr: 'नेटवर्क एरर, दोबारा कोशिश करें।',
     genericErr: 'कुछ गलत हुआ, दोबारा कोशिश करें।',
-    trackFallback: 'गाना',
-    autoLyricsBtn: '✨ बोल खुद लिखवाएं (AI से)',
-    autoLyricsNeedTitle: 'पहले गाने का नाम लिखें, फिर बोल लिखवाएं।',
-    autoLyricsWorking: 'बोल लिखे जा रहे हैं...',
-    autoLyricsFailed: 'बोल नहीं लिखे जा सके, दोबारा कोशिश करें।',
-    autoLyricsTimeout: 'समय ज़्यादा लग रहा है, दोबारा कोशिश करें।'
+    trackFallback: 'गाना'
   },
   en: {
     tagline: 'Your voice, your words — a song made with AI',
-    heading: 'Create your new song',
-    subheading: "Fill in the name, lyrics and style — we'll handle the rest",
-    titleLabel: 'Song title',
-    titlePlaceholder: 'e.g. Maa Sherawali',
-    lyricsLabel: 'Lyrics or idea',
-    lyricsPlaceholder: 'Write your lyrics or story here...',
-    styleLabel: 'Music style',
-    voiceLabel: 'Voice',
-    submitBtn: 'Send song request',
-    needFields: 'Please enter a song title and lyrics or idea.',
+    lyricsHead: 'Lyrics',
+    lyricsPlaceholder: 'Write lyrics, or just a prompt/idea...',
+    instrumentalLabel: 'Instrumental only (no vocals)',
+    styleHead: 'Styles',
+    stylePlaceholder: 'Describe what you want your song to sound like — DJ, devotional, romantic...',
+    moreOptions: 'More Options',
+    titlePlaceholder: 'Song title (optional)',
+    submitBtn: 'Create 🎵',
+    needFields: 'Please fill in lyrics or style.',
     sending: 'Sending request...',
-    generating: 'Creating your song... (this can take 30-60 seconds)',
+    generating: 'Creating your song... (30-60 seconds)',
     waiting: 'Creating your song... please wait.',
     done: 'Your song is ready! 🎉',
     doneNoAudio: 'Song created, but no audio was found. Please try again.',
-    failed: 'Something went wrong while creating the song. Please try again.',
-    timeout: "This is taking longer than expected. Please try again shortly.",
+    failed: 'Something went wrong. Please try again.',
+    timeout: 'Taking longer than expected. Please try again shortly.',
     networkErr: 'Network error, please try again.',
     genericErr: 'Something went wrong, please try again.',
-    trackFallback: 'Song',
-    autoLyricsBtn: '✨ Auto-write lyrics (AI)',
-    autoLyricsNeedTitle: 'Enter a song title first, then auto-write lyrics.',
-    autoLyricsWorking: 'Writing lyrics...',
-    autoLyricsFailed: 'Could not write lyrics, please try again.',
-    autoLyricsTimeout: 'This is taking too long, please try again.'
+    trackFallback: 'Song'
   }
 };
 
@@ -309,20 +188,26 @@ function setLang(lang){
     el.placeholder = i18n[lang][el.getAttribute('data-i18n-placeholder')];
   });
 }
-
 setLang('hi');
+
+function toggleMore(){
+  const el = document.getElementById('moreOptions');
+  const arrow = document.getElementById('moreArrow');
+  el.classList.toggle('open');
+  arrow.textContent = el.classList.contains('open') ? '⌃' : '⌄';
+}
 
 async function makeSong(){
   const t = i18n[currentLang];
-  const title = document.getElementById('title').value.trim();
   const lyrics = document.getElementById('lyrics').value.trim();
-  const style = document.getElementById('style').value;
-  const voice = document.getElementById('voice').value;
+  const style = document.getElementById('style').value.trim();
+  const title = document.getElementById('title').value.trim();
+  const instrumental = document.getElementById('instrumental').checked;
   const status = document.getElementById('status');
   const btn = document.getElementById('makeBtn');
   const result = document.getElementById('result');
 
-  if(!title || !lyrics){
+  if(!lyrics && !style){
     status.textContent = t.needFields;
     return;
   }
@@ -335,7 +220,7 @@ async function makeSong(){
     const res = await fetch(`${BACKEND_URL}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, lyrics, style, voice })
+      body: JSON.stringify({ lyrics, style, title, instrumental })
     });
     const data = await res.json();
     if(!res.ok || !data.taskId){
@@ -349,79 +234,6 @@ async function makeSong(){
     status.textContent = t.networkErr;
     btn.disabled = false;
   }
-}
-
-async function autoWriteLyrics(){
-  const t = i18n[currentLang];
-  const title = document.getElementById('title').value.trim();
-  const style = document.getElementById('style').value;
-  const lyrics = document.getElementById('lyrics');
-  const status = document.getElementById('status');
-  const btn = document.getElementById('autoLyricsBtn');
-
-  if(!title){
-    status.textContent = t.autoLyricsNeedTitle;
-    return;
-  }
-
-  btn.disabled = true;
-  status.textContent = t.autoLyricsWorking;
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/lyrics`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: `${title} - ${style}` })
-    });
-    const data = await res.json();
-    if(!res.ok || !data.taskId){
-      status.textContent = data.error || t.autoLyricsFailed;
-      btn.disabled = false;
-      return;
-    }
-    pollLyrics(data.taskId);
-  } catch(err){
-    status.textContent = t.networkErr;
-    btn.disabled = false;
-  }
-}
-
-function pollLyrics(taskId){
-  const t = i18n[currentLang];
-  const status = document.getElementById('status');
-  const btn = document.getElementById('autoLyricsBtn');
-  const lyrics = document.getElementById('lyrics');
-  let attempts = 0;
-  const maxAttempts = 20;
-
-  const timer = setInterval(async () => {
-    attempts++;
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/lyrics-status?taskId=${encodeURIComponent(taskId)}`);
-      const data = await res.json();
-      const items = (data.response && data.response.lyricsData) || data.lyricsData || [];
-      const done = items.find(it => it.status === 'complete' && it.text);
-
-      if (done){
-        clearInterval(timer);
-        lyrics.value = done.text;
-        status.textContent = '';
-        btn.disabled = false;
-      } else if (items.some(it => it.status === 'failed')){
-        clearInterval(timer);
-        status.textContent = t.autoLyricsFailed;
-        btn.disabled = false;
-      } else {
-        status.textContent = t.autoLyricsWorking;
-      }
-    } catch(e){ /* retry on next tick */ }
-
-    if (attempts >= maxAttempts){
-      clearInterval(timer);
-      status.textContent = t.autoLyricsTimeout;
-      btn.disabled = false;
-    }
-  }, 4000);
 }
 
 function pollStatus(taskId){
