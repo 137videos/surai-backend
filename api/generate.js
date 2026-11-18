@@ -15,14 +15,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed, use POST' });
   }
 
-  const { title, lyrics, style, voice } = req.body || {};
+  const { lyrics, style, title, instrumental } = req.body || {};
 
-  if (!title || !lyrics) {
-    return res.status(400).json({ error: 'title aur lyrics dono zaroori hain' });
+  if (!lyrics && !style) {
+    return res.status(400).json({ error: 'lyrics ya style mein se kam se kam ek bharein' });
   }
 
-  const instrumental = voice === 'Instrumental Only';
-
+  const finalTitle = (title && title.trim()) || (lyrics || style).slice(0, 50);
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const callBackUrl = `${proto}://${req.headers.host}/api/callback`;
 
@@ -35,11 +34,12 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         customMode: true,
-        instrumental,
-        title: String(title).slice(0, 80),
-        prompt: lyrics,
-        style: style || 'Indian Pop',
-        model: 'V4_5',callBackUrl,
+        instrumental: !!instrumental,
+        title: String(finalTitle).slice(0, 80),
+        prompt: String(lyrics || style).slice(0, 3000),
+        style: String(style || 'Indian Pop').slice(0, 200),
+        model: 'V4_5',
+        callBackUrl,
       }),
     });
 
@@ -49,6 +49,7 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: data.msg || 'SunoAPI ne error diya', raw: data });
     }
 
+    // taskId ko frontend ko wapas bhejo — status poll karne ke liye isi ki zaroorat hai
     return res.status(200).json({ taskId: data.data.taskId });
   } catch (err) {
     return res.status(500).json({ error: 'Server error', detail: err.message });
