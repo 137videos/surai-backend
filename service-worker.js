@@ -1,5 +1,5 @@
 const CACHE_NAME = 'surai-studio-v1';
-const CORE_ASSETS = ['/', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png'];
+const CORE_ASSETS = ['/', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
