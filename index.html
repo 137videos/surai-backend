@@ -6,8 +6,8 @@
 <title>SurAI Studio</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#1e3a8a">
-<link rel="icon" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SurAI Studio">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,7 +111,10 @@
   <div class="section">
     <div class="section-head">
       <span data-i18n="lyricsHead"></span>
-      <button type="button" class="wand" id="lyricsWandBtn" onclick="autoLyrics()" title="auto">✨</button>
+      <span style="display:flex; gap:6px;">
+        <button type="button" class="wand" id="polishBtn" onclick="polishLyrics()" title="polish">📝</button>
+        <button type="button" class="wand" id="lyricsWandBtn" onclick="autoLyrics()" title="auto">✨</button>
+      </span>
     </div>
     <textarea id="lyrics" data-i18n-placeholder="lyricsPlaceholder"></textarea>
     <label class="toggle-row">
@@ -169,7 +172,10 @@ const i18n = {
     trackFallback: 'गाना',
     lyricsWorking: 'बोल लिखे जा रहे हैं...',
     lyricsFailed: 'बोल नहीं लिख पाया, दोबारा कोशिश करें।',
-    lyricsTimeout: 'समय ज़्यादा लग रहा है, दोबारा कोशिश करें।'
+    lyricsTimeout: 'समय ज़्यादा लग रहा है, दोबारा कोशिश करें।',
+    polishNeedLyrics: 'पहले कुछ बोल लिखें, फिर सुधारें।',
+    polishWorking: 'बोल सुधारे जा रहे हैं...',
+    polishFailed: 'सुधार नहीं पाया, दोबारा कोशिश करें।'
   },
   en: {
     tagline: 'Your voice, your words — a song made with AI',
@@ -194,7 +200,10 @@ const i18n = {
     trackFallback: 'Song',
     lyricsWorking: 'Writing lyrics...',
     lyricsFailed: 'Could not write lyrics, please try again.',
-    lyricsTimeout: 'Taking too long, please try again.'
+    lyricsTimeout: 'Taking too long, please try again.',
+    polishNeedLyrics: 'Write some lyrics first, then polish them.',
+    polishWorking: 'Polishing lyrics...',
+    polishFailed: 'Could not polish, please try again.'
   }
 };
 
@@ -258,6 +267,42 @@ const styleOptions = {
     'Emotional song, soft music, piano'
   ]
 };
+
+async function polishLyrics(){
+  const t = i18n[currentLang];
+  const status = document.getElementById('status');
+  const btn = document.getElementById('polishBtn');
+  const lyricsBox = document.getElementById('lyrics');
+  const lyrics = lyricsBox.value.trim();
+
+  if(!lyrics){
+    status.textContent = t.polishNeedLyrics;
+    return;
+  }
+
+  btn.disabled = true;
+  status.textContent = t.polishWorking;
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/polish-lyrics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lyrics })
+    });
+    const data = await res.json();
+    if(!res.ok || !data.polished){
+      status.textContent = data.error || t.polishFailed;
+      btn.disabled = false;
+      return;
+    }
+    lyricsBox.value = data.polished;
+    status.textContent = '';
+  } catch(err){
+    status.textContent = t.networkErr;
+  } finally {
+    btn.disabled = false;
+  }
+}
 
 function autoStyle(){
   const styleBox = document.getElementById('style');
